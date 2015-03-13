@@ -1,0 +1,25 @@
+{ "type": "FeatureCollection",
+  "features": 
+  [
+    { "type": "Resource",
+      "properties": {
+          "name": "Sergent Bigras",
+          "number":"123412341234",
+          "count":"4",
+          "price1":"2.00$",
+          "price2":"5.00$",
+          "price3":"10.00$"
+          }
+	},
+	{ "type": "Resource",
+      "properties": {
+          "name": "Serge Poitras",
+          "number":"123412341234",
+          "count":"1",
+          "price1":"59.99$",
+          "price2":"75.00$",
+          "price3":"100.00$"          
+          }
+	}
+  ]
+}

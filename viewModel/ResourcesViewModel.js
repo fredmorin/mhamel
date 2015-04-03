@@ -16,9 +16,11 @@ function ResourcesViewModel() {
   // --- public functions
 
   this.init = function () {
+        this.resources.removeAll();
 	this.load();
   };
 
+  
   this.load = function () {
 
     resourceDataService.getResources(function (resources) {

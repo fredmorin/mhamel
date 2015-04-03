@@ -5,7 +5,7 @@
     if ($conn) {
         
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
-            $query = $conn->query("SELECT * FROM resource", PDO::FETCH_ASSOC);
+            $query = $conn->query("SELECT * FROM resource ORDER BY number", PDO::FETCH_ASSOC);
             $results = $query->fetchAll();
 
             $featureCollection = new stdClass();
@@ -26,7 +26,17 @@
             }
             $json = json_encode($featureCollection);
             die($json);
-
+        }
+        else if($_SERVER['REQUEST_METHOD'] == 'PUT'){
+            parse_str(file_get_contents("php://input"),$putvars);
+            
+            $sql = "UPDATE resource SET count=?, paidprice=?, retailprice=?, saleprice=? WHERE id=?";;
+            $query = $conn->prepare($sql);
+            $success = $query->execute(array($putvars['count'],$putvars['paidPrice'],$putvars['retailPrice'],$putvars['salePrice'],$putvars['id']));
+            if($success !== true){
+                http_response_code(400);
+            }
+            
         }
     } else {
         print "Connection to database failed!\n";

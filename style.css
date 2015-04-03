@@ -3,6 +3,11 @@
 {
   overflow: hidden;
 }
+
+.list
+{
+  margin-top: 15px;
+}
     
 .resource div
 {

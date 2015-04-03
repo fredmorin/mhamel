@@ -3,6 +3,7 @@
     <head>
         <title>M. Hamel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
 
         <!-- required libraries -->
         <link rel="stylesheet" href="lib/jquery.mobile-1.3.1.min.css" />
@@ -29,7 +30,7 @@
         <!-- ### A page that renders the ResourceViewModel -->
         <div data-role="page" id="resourcesView">
             <div data-role="header">
-                <h1>Resources</h1>
+                <h1>M. Hamel</h1>
             </div>
             <div data-role="main" class="ui-content">
                 <ul data-role="listview">
@@ -38,19 +39,32 @@
                         <a data-bind="click: $parent.resourceClicked"> 
                             <h3 data-bind="text: number"></h3>
                             <div class="ui-li-count" data-bind="text: count"></div>
-                        </a>
-                        
+                        </a>                        
                     </li>
                     <!-- /ko -->
                 </ul>
-                <div data-role="footer" data-id="footer" data-position="fixed">
-                    <div data-role="navbar">
-                        <ul>
-                            <li ><a href="#resourcesView" class="ui-btn-active ui-state-persist">Resources</a></li>
-                        </ul>
-                    </div><!-- /navbar -->
-                </div><!-- /footer -->
             </div>
         </div>
+        
+        
+        <div data-role="page" data-add-back-btn="true" id="resourceView">
+            <div data-role="header">
+                <h1>M. Hamel</h1>
+            </div>
+            <div data-role="main" class="resource">
+                <label for="text-basic">Pièce:</label>
+                <input type="text" name="number" data-bind="value: number">
+                <label for="text-basic">Inventaire:</label>
+                <input type="number" pattern="[0-9]*" data-bind="value: count">
+                <label for="text-basic">Prix payé:</label>
+                <input type="number" pattern="[0-9.]*" step="0.01" data-bind="value: paidPrice">
+                <label for="text-basic">Prix de détail:</label>
+                <input type="number" pattern="[0-9.]*" step="0.01" data-bind="value: retailPrice">
+                <label for="text-basic">Prix de vente:</label>
+                <input type="number" pattern="[0-9.]*" step="0.01" data-bind="value: salePrice">
+                <input type="submit" value="Sauvegarder" theme="b" data-bind="click: submitClicked" >
+            </div>
+        </div>        
+        
     </body>
 </html>

@@ -6,7 +6,7 @@ function ResourceDataService() {
   /// version of the response provided by the Twitter APIs
   /// </summary>
 
-  var baseUrl = "service/resource.json";
+  var baseUrl = "service/";
 
   this.getResources = function (callback) {
 
@@ -21,9 +21,12 @@ function ResourceDataService() {
         // add the new items
         $.each(response.features, function (index, item) {
 			resourceViewModels.push({
-				name: item.properties.name,
+                                id: item.properties.id,
                                 number: item.properties.number,
-                                count: item.properties.count
+                                count: item.properties.count,
+                                paidPrice: item.properties.paidPrice,
+                                retailPrice: item.properties.retailPrice,
+                                salePrice: item.properties.salePrice
           });
         });
 

@@ -3,22 +3,22 @@
   [
     { "type": "Resource",
       "properties": {
-          "name": "Sergent Bigras",
-          "number":"123412341234",
+          "id":"1",
+          "number":"4000R",
           "count":"4",
-          "price1":"2.00$",
-          "price2":"5.00$",
-          "price3":"10.00$"
+          "paidPrice":"2.00",
+          "retailPrice":"5.00",
+          "salePrice":"10.00"
           }
 	},
 	{ "type": "Resource",
       "properties": {
-          "name": "Serge Poitras",
-          "number":"123412341234",
+          "id":"2",
+          "number":"6522N",
           "count":"1",
-          "price1":"59.99$",
-          "price2":"75.00$",
-          "price3":"100.00$"          
+          "paidPrice":"59.99",
+          "retailPrice":"75.00",
+          "salePrice":"100.00"          
           }
 	}
   ]

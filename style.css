@@ -4,3 +4,20 @@
   overflow: hidden;
 }
     
+.resource div
+{
+  font-size: 18px;
+}
+    
+.resource .number
+{
+  font-weight:bold;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+    
+.resource .count
+{
+  color: #666;
+  margin-top: 10px;
+}

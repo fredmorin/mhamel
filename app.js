@@ -30,7 +30,7 @@ $.mobile.defaultPageTransition = "slide";
 
 $(document).ready(function () {
   ko.applyBindings(resourcesViewModel, document.getElementById("resourcesView"));
-//  ko.applyBindings(resourceViewModel, document.getElementById("resourceView"));
+  ko.applyBindings(resourceViewModel, document.getElementById("resourceView"));
   resourcesViewModel.init();
 });
 

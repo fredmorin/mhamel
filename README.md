@@ -1,6 +1,4 @@
-Knockout-jQueryMobile
-=====================
+A basic inventory mobile web application
 
-A simple example of integration between jQueryMobile with KnockoutJS, as described in this blog post:
-
+Inspired from the Knockout-jQueryMobile example:
 http://www.scottlogic.co.uk/blog/colin/2012/10/integrating-knockout-and-jquerymobile/

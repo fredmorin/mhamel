@@ -18,6 +18,7 @@
 
         <script type="text/javascript" src="viewModel/ResourcesViewModel.js"></script>
         <script type="text/javascript" src="viewModel/ResourceViewModel.js"></script>
+        <script type="text/javascript" src="viewModel/CreateResourceViewModel.js"></script>
         <script type="text/javascript" src="repository/repository.js"></script>
 
         <!-- the code that puts it all together -->
@@ -31,15 +32,15 @@
         <div data-role="page" id="resourcesView">
             <div data-role="header">
                 <h1>M. Hamel</h1>
+                <a data-bind="click:createResourceClicked" class="ui-btn-right">+</a>
             </div>
             <div data-role="main" class="list">
-                <ul data-role="listview" data-filter="true" data-filter-placeholder="Recherche de pièces..." >
-                <!--<ul data-role="listview" >-->                    
+                <ul data-role="listview" data-filter="true" data-filter-placeholder="Recherche de pièces..." >                 
                     <!-- ko foreach: resources, updateListviewOnChange:resources -->
                     <li>
                         <a data-bind="click: $parent.resourceClicked"> 
                             <h3 data-bind="text: number"></h3>
-                            <!--<div class="ui-li-count" data-bind="text: count"></div>-->
+                            <div class="ui-li-count" data-bind="text: count"></div>                
                         </a>                        
                     </li>
                     <!-- /ko -->
@@ -56,21 +57,58 @@
 <!--                <label for="text-basic">Pièce:</label>
                 <input type="text" name="number" data-bind="value: number">-->
                 <form>                
-                    <label for="numberfield">Inventaire:</label>
-                    <input id="numberfield" type="number" pattern="[0-9]*" data-bind="value: count">
+                    <label for="countfield">Inventaire:</label>
+                    <!--<div class="ui-block-a">-->
+                    <div id="countfield" data-inline="true">
+                    <input  type="number" pattern="[0-9]*" data-bind="value: count" readonly>
+                     <!--</div>-->
+                     <!--<div class="ui-block-b">-->
+                    <button data-bind="click: addone">+1</button>
+                    <button data-bind="click: removeone">-1</button>
+                    </div>
                     <label for="pricepaidfield">Prix payé:</label>
                     <input id="pricepaidfield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: paidPrice">
                     <label for="retailpricefield">Prix de détail:</label>
                     <input id="retailpricefield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: retailPrice">
                     <label for="salepricefield">Prix de vente:</label>
                     <input id="salepricefield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: salePrice">
+                    <label for="descriptionfield">Description:</label>        
+                    <textarea cols="40" rows="20" name="textarea" id="descriptionfield" data-bind="value: description"></textarea>                    
+                    <!--<input id="descriptionfield" type="text" width="200" data-bind="value: description">-->              
                     <input type="submit" value="Sauvegarder" data-bind="click: submitClicked" >
+                    <a data-bind="attr: { href: 'http://www.waiglobal.com/webestore/partnum.aspx?app=partsearch&part=' + number}" target="_blank">Rechercher sur WAIglobal</a>
                 </form>
             </div>
             <div data-role="popup" id="successpopupdiv">
                 <p>Sauvegarde complété!<p>
             </div>
         </div>        
+        
+        <div data-role="page" data-add-back-btn="true" id="createResourceView">
+            <div data-role="header">
+                <h1>Créer</h1>
+            </div>
+            <div data-role="main" class="resource">
+                <form>         
+                    <label for="numberfield">Pièce:</label>
+                    <input id="numberfield" type="text" name="number" data-bind="value: number">                    
+                    <label for="countfield">Inventaire:</label>
+                    <input id="countfield" type="number" pattern="[0-9]*" data-bind="value: count">
+                    <label for="pricepaidfield">Prix payé:</label>
+                    <input id="pricepaidfield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: paidPrice">
+                    <label for="retailpricefield">Prix de détail:</label>
+                    <input id="retailpricefield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: retailPrice">
+                    <label for="salepricefield">Prix de vente:</label>
+                    <input id="retailpricefield" type="number" pattern="[0-9.]*" step="0.01" data-bind="value: salePrice">
+                    <label for="descriptionfield">Description:</label>                  
+                    <input id="descriptionfield" type="text" width="200" data-bind="value: description">
+                    <input type="submit" value="Sauvegarder" data-bind="click: submitClicked" >
+                </form>
+            </div>
+            <div data-role="popup" id="successpopupdiv2">
+                <p>Sauvegarde complété!<p>
+            </div>
+        </div> 
         
     </body>
 </html>

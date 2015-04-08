@@ -24,6 +24,7 @@ ko.bindingHandlers.updateListviewOnChange = {
 // create the various view models
 var resourcesViewModel = new ResourcesViewModel();
 var resourceViewModel = new ResourceViewModel();
+var createResourceViewModel = new CreateResourceViewModel();
 
 $.mobile.defaultPageTransition = "slide";
 
@@ -31,7 +32,9 @@ $.mobile.defaultPageTransition = "slide";
 $(document).ready(function () {
   ko.applyBindings(resourcesViewModel, document.getElementById("resourcesView"));
   ko.applyBindings(resourceViewModel, document.getElementById("resourceView"));
+  ko.applyBindings(createResourceViewModel, document.getElementById("createResourceView"));
   resourcesViewModel.init();
+  $.mobile.changePage("#" + resourcesViewModel.template)
 });
 
 

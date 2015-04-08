@@ -37,8 +37,14 @@ function ResourcesViewModel() {
 
   this.resourceClicked = function (resource) {
     // navigate to the resource
-    resourceViewModel.init(resource);
+    resourceViewModel.init(resource.id);
     $.mobile.changePage("#" + resourceViewModel.template);
+  };
+  
+  this.createResourceClicked = function () {
+    // navigate to the resource
+    createResourceViewModel.init();
+    $.mobile.changePage("#" + createResourceViewModel.template);
   };
 
 }

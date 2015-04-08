@@ -17,16 +17,26 @@ function ResourceViewModel() {
   this.paidPrice = ko.observable();
   this.retailPrice = ko.observable();
   this.salePrice = ko.observable();
+  this.description = ko.observable();
   
   // --- public functions
 
-  this.init = function (r) {
-    this.id(r.id);
-    this.number(r.number);
-    this.count(r.count);
-    this.paidPrice(r.paidPrice);
-    this.retailPrice(r.retailPrice);
-    this.salePrice(r.salePrice);
+  this.init = function (id) {    
+    $.ajax({
+      dataType: 'json',
+      url: "service/?id=" + id,
+      type: 'get',
+      success: function(response) {  
+        self.id(response.features[0].properties.id);
+        self.number(response.features[0].properties.number);
+        self.count(response.features[0].properties.count);
+        self.paidPrice(response.features[0].properties.paidPrice);
+        self.retailPrice(response.features[0].properties.retailPrice);
+        self.salePrice(response.features[0].properties.salePrice);
+        self.description(response.features[0].properties.description);
+      },
+      error: function(){ alert("error"); }
+    });
   };
   
   this.disableEditNumber = ko.computed(function() {
@@ -36,10 +46,11 @@ function ResourceViewModel() {
   this.submitClicked = function(r){
      var updateData = {
          id : r.id(),
-         count: r.count(),
          paidPrice: r.paidPrice(),
          retailPrice: r.retailPrice(),
-         salePrice: r.salePrice()         
+         salePrice: r.salePrice(),
+         description: r.description(),
+         request:'update'
      };
       
     $.ajax({
@@ -60,5 +71,58 @@ function ResourceViewModel() {
       
   };
 
+  this.addone = function(r){
+     var updateData = {
+         id : r.id(),
+         request: 'add'
+     };
+      
+    $.ajax({
+      dataType: 'json',
+      url: "service/",
+      type: 'put',
+      data: updateData,
+      success: function(response) {           
+          $( "#successpopupdiv" ).popup( "open" );
+          self.init(self.id());
+          setTimeout(function () {
+                $( "#successpopupdiv" ).popup( "close" );
+                resourcesViewModel.init();
+
+                //$.mobile.changePage("#" + resourcesViewModel.template); 
+            }, 500);
+          
+      },
+      error: function(){ alert("error"); }
+    });
+      
+  };
+  
+    this.removeone = function(r){
+     var updateData = {
+         id : r.id(),
+         request: 'remove'
+     };
+      
+    $.ajax({
+      dataType: 'json',
+      url: "service/",
+      type: 'put',
+      data: updateData,
+      success: function(response) {           
+          $( "#successpopupdiv" ).popup( "open" );
+          self.init(self.id());
+          setTimeout(function () {
+                $( "#successpopupdiv" ).popup( "close" );
+                resourcesViewModel.init();
+                
+                //$.mobile.changePage("#" + resourcesViewModel.template); 
+            }, 500);
+          
+      },
+      error: function(){ alert("error"); }
+    });
+      
+  };
 
 }

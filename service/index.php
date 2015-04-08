@@ -64,6 +64,12 @@
     if ($conn) {        
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
             
+            if(isset($_GET['request']) && $_GET['request'] == 'backup'){
+                header('Content-disposition: attachment; filename=data.sqlite');
+                header('Content-type: application/octet-stream');
+                readfile($_ENV['OPENSHIFT_DATA_DIR'] . 'data.sqlite');
+            }
+            
             if(isset($_GET['id'])){
                 $id = intval($_GET['id']);
                 $sql = "SELECT * FROM resource WHERE id={$id}";

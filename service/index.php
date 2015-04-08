@@ -2,8 +2,8 @@
    // $dbconn = sqlite_open('data.sqlite');
 //$_ENV['$OPENSHIFT_DATA_DIR'] 
 
-    if(isset($_ENV['$OPENSHIFT_DATA_DIR'])){
-        $conn = new PDO('sqlite:' . $_ENV['$OPENSHIFT_DATA_DIR'] . 'data.sqlite');
+    if(isset($_ENV['OPENSHIFT_DATA_DIR'])){
+        $conn = new PDO('sqlite:' . $_ENV['OPENSHIFT_DATA_DIR'] . 'data.sqlite');
         
         $conn->exec("CREATE TABLE IF NOT EXISTS resource(
             id integer primary key autoincrement not null,

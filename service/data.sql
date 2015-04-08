@@ -1,4 +1,3 @@
-
 CREATE TABLE resource(
   id integer primary key autoincrement not null,
   number char(15) unique not null,
@@ -13,11 +12,6 @@ CREATE TABLE eventtype(
   id integer primary key not null,
   name char(15)
 )
-
-
-SELECT datetime('now');
-
-select strftime('%Y-%m-%dT%H:%M:%f', 'now')
 
 CREATE TABLE eventlog(
     resourceid integer,
@@ -51,7 +45,9 @@ insert into resource (number, count, paidprice, retailprice, saleprice, descript
 values('8554A',0,10,15,20,'description...')
 
 
+SELECT datetime('now');
 
+select strftime('%Y-%m-%dT%H:%M:%f', 'now')
 select * from resource
 select * from eventlog order by datetime;
 select * from eventtype

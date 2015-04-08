@@ -1,9 +1,67 @@
 <?php
    // $dbconn = sqlite_open('data.sqlite');
-    $conn = new PDO('sqlite:data.sqlite');
+//$_ENV['$OPENSHIFT_DATA_DIR'] 
 
-    if ($conn) {
+    if(isset($_ENV['$OPENSHIFT_DATA_DIR'])){
+        $conn = new PDO('sqlite:' . $_ENV['$OPENSHIFT_DATA_DIR'] . 'data.sqlite');
         
+        $conn->exec("CREATE TABLE IF NOT EXISTS resource(
+            id integer primary key autoincrement not null,
+            number char(15) unique not null,
+            count int default 0,
+            paidprice real default 0.0,
+            retailprice real default 0.0,
+            saleprice real default 0.0,
+            description text
+            )" );
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventtype(
+            id integer primary key not null,
+            name char(15)
+            )" );        
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
+            resourceid integer,
+            eventtypeid integer,
+            datetime char(20),
+            userid char(15) not null,
+            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
+            FOREIGN KEY(resourceid) REFERENCES resource(id)
+            )" );
+
+        $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );
+        
+        
+    }else{
+        $conn = new PDO('sqlite:data1.sqlite');
+                $conn->exec("CREATE TABLE IF NOT EXISTS resource(
+            id integer primary key autoincrement not null,
+            number char(15) unique not null,
+            count int default 0,
+            paidprice real default 0.0,
+            retailprice real default 0.0,
+            saleprice real default 0.0,
+            description text
+            )" );
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventtype(
+            id integer primary key not null,
+            name char(15)
+            )" );        
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
+            resourceid integer,
+            eventtypeid integer,
+            datetime char(20),
+            userid char(15) not null,
+            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
+            FOREIGN KEY(resourceid) REFERENCES resource(id)
+            )" );
+
+        $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );
+    }    
+    
+    if ($conn) {        
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
             
             if(isset($_GET['id'])){

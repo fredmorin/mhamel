@@ -10,7 +10,7 @@
         $conn = new PDO('sqlite:' . $_ENV['OPENSHIFT_DATA_DIR'] . 'data.sqlite');
         
     }else{
-        $conn = new PDO('sqlite:data2.sqlite');
+        $conn = new PDO('sqlite:data5.sqlite');
     }    
     
     initializeDatabase($conn);
@@ -47,9 +47,9 @@
                 $feature->properties->number = $result['number'];
                 $feature->properties->count = $result['count'];
                 if(isset($_GET['id'])){                
-                    $feature->properties->paidPrice = number_format($result['paidprice'],2);
-                    $feature->properties->retailPrice = number_format($result['retailprice'],2);
-                    $feature->properties->salePrice = number_format($result['saleprice'],2);
+                    $feature->properties->paidPrice = getNumericValue($result['paidprice']);
+                    $feature->properties->retailPrice = getNumericValue($result['retailprice']);
+                    $feature->properties->salePrice = getNumericValue($result['saleprice']);
                     $feature->properties->description = $result['description'];
                 }
                 $featureCollection->features[] = $feature;            
@@ -68,19 +68,27 @@
                     http_response_code(400);
                 }
             }else if($request == 'remove'){
+                
                 $sql = "UPDATE resource SET count=count-1 WHERE id=?";
                 $query = $conn->prepare($sql);
                 $success1 = $query->execute(array($putvars['id']));
+                
+                $id = intval($putvars['id']);
+                $select = "SELECT number FROM resource WHERE id={$id}";
+                $selectQuery = $conn->query($select, PDO::FETCH_ASSOC);
+                $selectResult = $selectQuery->fetch();
+                echo("number:" . $selectResult['number']);
+                
                 if($success1){
-                    $sql = "INSERT INTO eventlog(resourceid, eventtypeid, datetime, userid) values(?,1, strftime('%Y-%m-%dT%H:%M:%f','now'), 'userid')";
-                    $query = $conn->prepare($sql);
-                    $success2 = $query->execute(array($putvars['id']));
-                    if($success2 !== true){
+                    $sqlinsert = "INSERT INTO eventlog(number, eventtypeid, datetime, userid) values(?,1, strftime('%Y-%m-%dT%H:%M:%f','now'), 'userid')";
+                    $queryinsert = $conn->prepare($sqlinsert);
+                    $success2 = $queryinsert->execute(array($selectResult['number']));
+                    if($success2 !== true){                        
                         http_response_code(400);
                     }                
-                }  else {
+                }  else {                    
                      http_response_code(400);
-                }
+                }                 
             }else if($request == 'add'){
                 $sql = "UPDATE resource SET count=count+1 WHERE id=?";
                 $query = $conn->prepare($sql);
@@ -101,7 +109,15 @@
         }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
             parse_str(file_get_contents("php://input"),$deletevars);
 
-            $sql = "UPDATE resource SET status='d' WHERE id=?";
+            $select = "SELECT count from resource WHERE id=?";
+            $selectQuery = $conn->query($select, PDO::FETCH_ASSOC);
+            $result = $selectQuery->fetch();
+            if($result['count'] > 0){
+               echo "Impossible de supprimer cet pièce puisqu'il y en a encore en inventaire.";
+               http_response_code(400);
+            }
+            
+            $sql = "DELETE FROM resource WHERE id=?";
             $query = $conn->prepare($sql);
             $success = $query->execute(array($deletevars['id']));
             if($success !== true){
@@ -110,6 +126,14 @@
         }
     } else {
         print "Connection to database failed!\n";
+    }
+    
+    function getNumericValue($value){
+        if($value == null){
+            return $value;
+        }else{
+            return number_format($value,2);
+        }        
     }
     
     
@@ -131,12 +155,12 @@
             )" );        
 
         $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
-            resourceid integer,
+            id integer primary key autoincrement not null,            
+            number char(15) not null,
             eventtypeid integer,
             datetime char(20),
             userid char(15) not null,
-            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
-            FOREIGN KEY(resourceid) REFERENCES resource(id)
+            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id)
             )" );
 
         $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );

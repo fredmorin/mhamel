@@ -83,12 +83,18 @@ function ResourceViewModel() {
   };
   
     this.deleteClicked = function(r){
+        
+        
+    if(r.count() > 0 ){
+        alert("Vous ne pouvez pas supprimer cette pièce parce qu'elle est en inventaire!");
+        return;
+    }
+    if(confirm("Êtes-vous certain de vouloir supprimer cette pièce?")){
      var deleteData = {
          id : r.id()     
      };
       
     $.ajax({
-      dataType: 'json',
       url: "service/",
       type: 'delete',
       data: deleteData,
@@ -106,7 +112,7 @@ function ResourceViewModel() {
           }else{
             alert("error"); }
           }
-    });
+    });}
       
   };
 
@@ -117,7 +123,6 @@ function ResourceViewModel() {
      };
       
     $.ajax({
-      dataType: 'json',
       url: "service/",
       type: 'put',
       data: updateData,
@@ -144,13 +149,17 @@ function ResourceViewModel() {
   };
   
     this.removeone = function(r){
+        
+    if(r.count() <= 0 ){
+        alert("Vous ne pouvez pas soustraire une pièce parce qu'il n'y en a pas en inventaire!");
+        return;
+    }
      var updateData = {
          id : r.id(),
          request: 'remove'
      };
       
     $.ajax({
-      dataType: 'json',
       url: "service/",
       type: 'put',
       data: updateData,

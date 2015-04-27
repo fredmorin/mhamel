@@ -33,7 +33,11 @@
         <div data-role="page" id="resourcesView">
             <div data-role="header">
                 <h1>M. Hamel</h1>
-                <a data-bind="click:createResourceClicked" class="ui-btn-right">+</a>
+               <div class="ui-btn-right" data-type="horizontal" data-role="controlgroup">
+                <a data-role="button" data-bind="click:createResourceClicked">Ajouter</a>
+                
+                </div>
+                <a class="ui-btn-left" data-role="button" target="_blank" href="service/summary.php">Sommaire</a>
             </div>
             <div data-role="main" class="list">
                 <ul data-role="listview" data-filter="true" data-filter-placeholder="Recherche de pièces..." >                 
@@ -125,6 +129,7 @@
                 <p>Sauvegarde complété!<p>
             </div>
         </div> 
-        
+
+       
     </body>
 </html>

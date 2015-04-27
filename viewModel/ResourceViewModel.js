@@ -81,6 +81,34 @@ function ResourceViewModel() {
     });
       
   };
+  
+    this.deleteClicked = function(r){
+     var deleteData = {
+         id : r.id()     
+     };
+      
+    $.ajax({
+      dataType: 'json',
+      url: "service/",
+      type: 'delete',
+      data: deleteData,
+      success: function(response) {           
+          $( "#successpopupdiv" ).popup( "open" );
+          setTimeout(function () {
+                resourcesViewModel.init();
+                $.mobile.changePage("#" + resourcesViewModel.template); 
+            }, 500);
+          
+      },
+      error: function(xhr, ajaxOptions, thrownError){ 
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error"); }
+          }
+    });
+      
+  };
 
   this.addone = function(r){
      var updateData = {

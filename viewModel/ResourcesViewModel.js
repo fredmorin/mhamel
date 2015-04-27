@@ -1,4 +1,4 @@
-/*globals $, ko, ResourcesDataService, resourcesViewModel*/
+/*globals $, ko, loginViewModel*/
 
 function ResourcesViewModel() {
   /// <summary>

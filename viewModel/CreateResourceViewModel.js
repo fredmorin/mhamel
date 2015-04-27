@@ -52,7 +52,14 @@ function CreateResourceViewModel() {
             }, 500);
           
       },
-      error: function(){ alert("error"); }
+      error: function(xhr){
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error; ce numero de pièce existe peut-être déjà!"); 
+          }
+      
+      }
     });
   };
 

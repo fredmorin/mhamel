@@ -1,65 +1,19 @@
 <?php
-   // $dbconn = sqlite_open('data.sqlite');
-//$_ENV['$OPENSHIFT_DATA_DIR'] 
+
+    session_start();
+    if(!isset($_SESSION['username'])){
+        http_response_code(401);
+        die;
+    }
 
     if(isset($_ENV['OPENSHIFT_DATA_DIR'])){
         $conn = new PDO('sqlite:' . $_ENV['OPENSHIFT_DATA_DIR'] . 'data.sqlite');
         
-        $conn->exec("CREATE TABLE IF NOT EXISTS resource(
-            id integer primary key autoincrement not null,
-            number char(15) unique not null,
-            count int default 0,
-            paidprice real default 0.0,
-            retailprice real default 0.0,
-            saleprice real default 0.0,
-            description text
-            )" );
-
-        $conn->exec("CREATE TABLE IF NOT EXISTS eventtype(
-            id integer primary key not null,
-            name char(15)
-            )" );        
-
-        $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
-            resourceid integer,
-            eventtypeid integer,
-            datetime char(20),
-            userid char(15) not null,
-            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
-            FOREIGN KEY(resourceid) REFERENCES resource(id)
-            )" );
-
-        $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );
-        
-        
     }else{
-        $conn = new PDO('sqlite:data1.sqlite');
-                $conn->exec("CREATE TABLE IF NOT EXISTS resource(
-            id integer primary key autoincrement not null,
-            number char(15) unique not null,
-            count int default 0,
-            paidprice real default 0.0,
-            retailprice real default 0.0,
-            saleprice real default 0.0,
-            description text
-            )" );
-
-        $conn->exec("CREATE TABLE IF NOT EXISTS eventtype(
-            id integer primary key not null,
-            name char(15)
-            )" );        
-
-        $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
-            resourceid integer,
-            eventtypeid integer,
-            datetime char(20),
-            userid char(15) not null,
-            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
-            FOREIGN KEY(resourceid) REFERENCES resource(id)
-            )" );
-
-        $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );
+        $conn = new PDO('sqlite:data2.sqlite');
     }    
+    
+    initializeDatabase($conn);
     
     if ($conn) {        
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
@@ -76,7 +30,7 @@
                 //die($sql);
                 $query = $conn->query($sql, PDO::FETCH_ASSOC);
             }else{
-                $query = $conn->query("SELECT * FROM resource ORDER BY number", PDO::FETCH_ASSOC);
+                $query = $conn->query("SELECT * FROM resource WHERE status='a' ORDER BY number", PDO::FETCH_ASSOC);
             }
             
             $results = $query->fetchAll();
@@ -102,8 +56,7 @@
             }
             $json = json_encode($featureCollection);
             die($json);
-        }
-        else if($_SERVER['REQUEST_METHOD'] == 'PUT'){
+        }else if($_SERVER['REQUEST_METHOD'] == 'PUT'){
             parse_str(file_get_contents("php://input"),$putvars);
             
             $request = $putvars['request'];
@@ -137,17 +90,57 @@
                 }
             }
             
-        }
-        else if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        }else if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $sql = "INSERT INTO resource(number, count, paidprice, retailprice, saleprice, description) values (?,?,?,?,?,?)";
+            error_log($sql);
             $query = $conn->prepare($sql);
             $success = $query->execute(array($_POST['number'],$_POST['count'],$_POST['paidPrice'],$_POST['retailPrice'],$_POST['salePrice'],$_POST['description']));
             if($success !== true){
                 http_response_code(400);
-            }
-            
-        }        
+            }            
+        }else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+            parse_str(file_get_contents("php://input"),$deletevars);
+
+            $sql = "UPDATE resource SET status='d' WHERE id=?";
+            $query = $conn->prepare($sql);
+            $success = $query->execute(array($deletevars['id']));
+            if($success !== true){
+                http_response_code(400);
+            }            
+        }
     } else {
         print "Connection to database failed!\n";
+    }
+    
+    
+    function initializeDatabase($conn){
+        $conn->exec("CREATE TABLE IF NOT EXISTS resource(
+            id integer primary key autoincrement not null,
+            number char(15) unique not null,
+            count int default 0,
+            paidprice real default 0.0,
+            retailprice real default 0.0,
+            saleprice real default 0.0,
+            description text,
+            status char(1) default 'a'
+            )" );
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventtype(
+            id integer primary key not null,
+            name char(15)
+            )" );        
+
+        $conn->exec("CREATE TABLE IF NOT EXISTS eventlog(
+            resourceid integer,
+            eventtypeid integer,
+            datetime char(20),
+            userid char(15) not null,
+            FOREIGN KEY(eventtypeid) REFERENCES eventtype(id),
+            FOREIGN KEY(resourceid) REFERENCES resource(id)
+            )" );
+
+        $conn->exec("insert into eventtype(id, name) values ( 1, 'sale')" );
+
+        
     }
 ?>

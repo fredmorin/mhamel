@@ -15,7 +15,8 @@
         <script type="text/javascript" src="lib/knockout-2.2.0rc.debug.js"></script>
         <script type="text/javascript" src="lib/iscroll.js"></script>
         <script type="text/javascript" src="lib/jquery.mobile.iscrollview.js"></script>
-
+        
+        <script type="text/javascript" src="viewModel/LoginViewModel.js"></script>
         <script type="text/javascript" src="viewModel/ResourcesViewModel.js"></script>
         <script type="text/javascript" src="viewModel/ResourceViewModel.js"></script>
         <script type="text/javascript" src="viewModel/CreateResourceViewModel.js"></script>
@@ -48,6 +49,19 @@
             </div>
         </div>
         
+        <div data-role="page" data-add-back-btn="false" id="loginView">
+            <div data-role="header">
+                <h1>M. Hamel - Login</h1>
+            </div>
+            <div data-role="main">
+                <label for="usernamefield">Nom utilisateur:</label>
+                <input id="usernamefield" type="text" data-bind="value: username">
+                <label for="passwordfield">Mot de passe:</label>
+                <input id="passwordfield" type="password" data-bind="value: password">
+                <input type="submit" value="Login" data-bind="click: loginClicked" >
+            </div>
+        </div>
+        
         
         <div data-role="page" data-add-back-btn="true" id="resourceView">
             <div data-role="header">
@@ -76,6 +90,7 @@
                     <textarea cols="40" rows="20" name="textarea" id="descriptionfield" data-bind="value: description"></textarea>                    
                     <!--<input id="descriptionfield" type="text" width="200" data-bind="value: description">-->              
                     <input type="submit" value="Sauvegarder" data-bind="click: submitClicked" >
+                    <!--http://www.waiglobal.com/webestore/partsearch.aspx?part=8000N-->
                     <a data-bind="attr: { href: 'http://www.waiglobal.com/webestore/partnum.aspx?app=partsearch&part=' + number}" target="_blank">Rechercher sur WAIglobal</a>
                 </form>
             </div>

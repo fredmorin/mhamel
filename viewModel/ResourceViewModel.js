@@ -35,7 +35,13 @@ function ResourceViewModel() {
         self.salePrice(response.features[0].properties.salePrice);
         self.description(response.features[0].properties.description);
       },
-      error: function(){ alert("error"); }
+      error: function(xhr, ajaxOptions, thrownError){ 
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error"); 
+          }
+      }
     });
   };
   
@@ -66,7 +72,12 @@ function ResourceViewModel() {
             }, 500);
           
       },
-      error: function(){ alert("error"); }
+      error: function(xhr, ajaxOptions, thrownError){ 
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error"); }
+          }
     });
       
   };
@@ -93,7 +104,13 @@ function ResourceViewModel() {
             }, 500);
           
       },
-      error: function(){ alert("error"); }
+      error: function(xhr, ajaxOptions, thrownError){ 
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error"); 
+          }
+      }
     });
       
   };
@@ -120,7 +137,13 @@ function ResourceViewModel() {
             }, 500);
           
       },
-      error: function(){ alert("error"); }
+      error: function(xhr, ajaxOptions, thrownError){ 
+          if(xhr.status === 401){
+              $.mobile.changePage("#" + loginViewModel.template); 
+          }else{
+            alert("error"); 
+          }         
+      }
     });
       
   };

@@ -25,16 +25,31 @@ ko.bindingHandlers.updateListviewOnChange = {
 var resourcesViewModel = new ResourcesViewModel();
 var resourceViewModel = new ResourceViewModel();
 var createResourceViewModel = new CreateResourceViewModel();
+var loginViewModel = new LoginViewModel();
 
 $.mobile.defaultPageTransition = "slide";
 
 
 $(document).ready(function () {
+  ko.applyBindings(loginViewModel, document.getElementById("loginView"));
   ko.applyBindings(resourcesViewModel, document.getElementById("resourcesView"));
   ko.applyBindings(resourceViewModel, document.getElementById("resourceView"));
   ko.applyBindings(createResourceViewModel, document.getElementById("createResourceView"));
-  resourcesViewModel.init();
-  $.mobile.changePage("#" + resourcesViewModel.template)
+  //resourcesViewModel.init();
+    $.ajax({
+      url: "service/",
+      type: 'GET',
+      success: function(response) {  
+        resourcesViewModel.init();
+        $.mobile.changePage("#" + resourcesViewModel.template)
+      },
+      error: function(){ 
+        $.mobile.changePage("#" + loginViewModel.template)
+      }
+    });
+  
+  
+
 });
 
 

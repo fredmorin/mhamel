@@ -27,7 +27,7 @@ var resourceViewModel = new ResourceViewModel();
 var createResourceViewModel = new CreateResourceViewModel();
 var loginViewModel = new LoginViewModel();
 
-$.mobile.defaultPageTransition = "slide";
+$.mobile.defaultPageTransition = "none";
 
 
 $(document).ready(function () {
